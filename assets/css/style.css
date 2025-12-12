@@ -379,6 +379,38 @@ body {
     text-decoration: none;
 }
 
+/* Download Progress Styles */
+.download-progress {
+    width: 100%;
+    padding: 8px 0;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #34a853, #4caf50);
+    border-radius: 10px;
+    width: 0%;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(52, 168, 83, 0.5);
+}
+
+.progress-text {
+    display: block;
+    font-size: 12px;
+    color: #ffffff;
+    text-align: center;
+    font-weight: 500;
+}
+
 /* App List (Top Charts) */
 .app-list {
     background-color: #ffffff;
@@ -470,6 +502,19 @@ body {
     background-color: #1557b0;
     color: #ffffff;
     text-decoration: none;
+}
+
+.install-button-small .download-progress {
+    padding: 4px 0;
+}
+
+.install-button-small .progress-bar-container {
+    height: 4px;
+    margin-bottom: 4px;
+}
+
+.install-button-small .progress-text {
+    font-size: 11px;
 }
 
 /* Responsive Design */

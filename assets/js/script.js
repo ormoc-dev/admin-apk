@@ -1,15 +1,17 @@
-// GitHub Release APK Download functionality
+// Automatic APK Download functionality - stays on same page
+// Fetches file and triggers download without navigation
+
 document.addEventListener('DOMContentLoaded', function() {
     const installButtons = document.querySelectorAll('.install-button, .install-button-small');
     
     installButtons.forEach(button => {
         button.addEventListener('click', function(e) {
+            e.preventDefault(); // Always prevent navigation
+            
             const url = this.getAttribute('href');
             
-            // Check if URL is configured (not the placeholder)
-            if (!url || url.includes('YOUR_USERNAME') || url.includes('YOUR_REPO')) {
-                e.preventDefault();
-                alert('Please update the GitHub Release URL in index.html with your actual repository URL');
+            if (!url) {
+                alert('Download URL not configured');
                 return false;
             }
             
@@ -19,15 +21,49 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.opacity = '0.7';
             this.style.pointerEvents = 'none';
             
-            // GitHub Releases will handle the download automatically
-            // The link opens in a new tab and triggers download
-            
-            // Reset button text after a delay
-            setTimeout(() => {
-                this.textContent = originalText;
-                this.style.opacity = '1';
-                this.style.pointerEvents = 'auto';
-            }, 2000);
+            // Fetch the file from GitHub and create blob download
+            // This keeps the user on the same page
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch file: ' + response.statusText);
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Create a blob URL for download
+                    const blobUrl = window.URL.createObjectURL(blob);
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = blobUrl;
+                    downloadLink.download = 'app-release.apk'; // Set filename
+                    downloadLink.style.display = 'none';
+                    
+                    // Append to body, trigger download, then remove
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                    
+                    // Clean up blob URL after download starts
+                    setTimeout(() => {
+                        window.URL.revokeObjectURL(blobUrl);
+                    }, 100);
+                    
+                    // Reset button state
+                    this.textContent = originalText;
+                    this.style.opacity = '1';
+                    this.style.pointerEvents = 'auto';
+                })
+                .catch(error => {
+                    console.error('Download error:', error);
+                    
+                    // Show error message
+                    alert('Download failed. Please check your internet connection and try again.\n\nError: ' + error.message);
+                    
+                    // Reset button state
+                    this.textContent = originalText;
+                    this.style.opacity = '1';
+                    this.style.pointerEvents = 'auto';
+                });
         });
     });
 });

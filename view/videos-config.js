@@ -4,7 +4,9 @@
 const VIDEO_COMPONENTS = [
     'view/video/video-card.html',
     'view/video/video-card-2.html',
-    'view/video/video-card-3.html'
+    'view/video/video-card-3.html',
+    'view/video/video-card-4.html',
+
     // Add more video component files here
     // Example: 'view/video/video-card-4.html',
 ];

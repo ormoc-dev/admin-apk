@@ -126,15 +126,31 @@
         <div id="books-content" class="tab-content">
             <section class="category-section">
                 <div class="section-header">
-                    <h2 class="section-title">Coming Soon</h2>
+                    <h2 class="section-title">Ormoc City Library</h2>
+                    <a href="#" class="see-all">View all</a>
                 </div>
-                <div class="empty-state">
-                    <span class="material-icons empty-icon">book</span>
-                    <p>Books section coming soon</p>
+                <div class="books-grid">
+                    <!-- Book components will be loaded here dynamically -->
+                    <div class="loading-placeholder" style="text-align: center; padding: 40px; color: #5f6368;">
+                        <span class="material-icons" style="font-size: 48px; display: block; margin-bottom: 16px; opacity: 0.5;">menu_book</span>
+                        <p>Loading books...</p>
+                    </div>
                 </div>
             </section>
         </div>
     </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <p class="footer-text">© 2025 Ormoc City APK. All rights reserved.</p>
+            </div>
+            <div class="footer-section">
+                <p class="footer-developer">Developed by <span class="developer-name">Anthony Capuyan</span></p>
+            </div>
+        </div>
+    </footer>
 
     <script src="assets/js/script.js"></script>
 </body>

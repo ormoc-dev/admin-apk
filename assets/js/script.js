@@ -154,6 +154,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (targetTab === 'movies') {
                     loadVideoComponents();
                 }
+                
+                // Load components if Books tab is clicked
+                if (targetTab === 'books') {
+                    loadBookComponents();
+                }
             }
         });
     });
@@ -187,7 +192,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const videoComponents = [
             'view/video/video-card.html',
             'view/video/video-card-2.html',
-            'view/video/video-card-3.html'
+            'view/video/video-card-3.html',
+            'view/video/video-card-4.html',
             // Add more video components here or load from config
         ];
 
@@ -216,62 +222,62 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Mark as loaded
         videoGrid.dataset.loaded = 'true';
-        
-        // Initialize play button functionality after videos are loaded
-        initializePlayButtons();
     }
 
-    // Initialize Play Button Functionality
-    function initializePlayButtons() {
-        const playButtons = document.querySelectorAll('.play-button');
-        const videoWrappers = document.querySelectorAll('.video-wrapper');
-        
-        playButtons.forEach((button, index) => {
-            button.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const wrapper = this.closest('.video-wrapper');
-                const iframe = wrapper.querySelector('iframe');
-                
-                if (wrapper && iframe) {
-                    // Mark as playing
-                    wrapper.classList.add('playing');
-                    
-                    // Hide play overlay
-                    const overlay = wrapper.querySelector('.video-play-overlay');
-                    if (overlay) {
-                        overlay.style.opacity = '0';
-                        overlay.style.pointerEvents = 'none';
-                    }
-                    
-                    // Try to play the video (Facebook iframes handle this automatically)
-                    // The iframe will handle playback when clicked
-                }
-            });
-        });
-        
-        // Also allow clicking anywhere on the video wrapper to play
-        videoWrappers.forEach(wrapper => {
-            wrapper.addEventListener('click', function(e) {
-                // Don't trigger if clicking the play button
-                if (e.target.closest('.play-button')) {
-                    return;
-                }
-                
-                const iframe = this.querySelector('iframe');
-                const overlay = this.querySelector('.video-play-overlay');
-                
-                if (iframe && overlay && !this.classList.contains('playing')) {
-                    // Mark as playing
-                    this.classList.add('playing');
-                    overlay.style.opacity = '0';
-                    overlay.style.pointerEvents = 'none';
-                }
-            });
-        });
+    // Load Book Components
+    async function loadBookComponents() {
+        const booksGrid = document.querySelector('.books-grid');
+        if (!booksGrid) return;
+
+        // Check if components are already loaded
+        if (booksGrid.dataset.loaded === 'true') {
+            return;
+        }
+
+        // List of book component files
+        const bookComponents = [
+            'view/books/book-card-1.html',
+            'view/books/book-card-2.html',
+            'view/books/book-card-3.html',
+            'view/books/book-card-4.html',
+            'view/books/book-card-5.html'
+            // Add more book components here
+        ];
+
+        // Clear existing content (including loading placeholder)
+        booksGrid.innerHTML = '';
+
+        // Load all components
+        let loadedCount = 0;
+        for (const componentPath of bookComponents) {
+            const componentHTML = await loadComponent(componentPath);
+            if (componentHTML) {
+                booksGrid.insertAdjacentHTML('beforeend', componentHTML);
+                loadedCount++;
+            }
+        }
+
+        // Show message if no books loaded
+        if (loadedCount === 0) {
+            booksGrid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #5f6368;">
+                    <span class="material-icons" style="font-size: 48px; display: block; margin-bottom: 16px; opacity: 0.5;">menu_book</span>
+                    <p>No books available</p>
+                </div>
+            `;
+        }
+
+        // Mark as loaded
+        booksGrid.dataset.loaded = 'true';
     }
 
     // Load video components on page load if Movies tab is active
     if (document.getElementById('movies-content')?.classList.contains('active')) {
         loadVideoComponents();
+    }
+    
+    // Load book components on page load if Books tab is active
+    if (document.getElementById('books-content')?.classList.contains('active')) {
+        loadBookComponents();
     }
 });

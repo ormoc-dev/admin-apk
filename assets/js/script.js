@@ -159,6 +159,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (targetTab === 'books') {
                     loadBookComponents();
                 }
+                
+                // Load components if Apps tab is clicked
+                if (targetTab === 'apps') {
+                    loadAppComponents();
+                }
             }
         });
     });
@@ -276,8 +281,246 @@ document.addEventListener('DOMContentLoaded', function() {
         loadVideoComponents();
     }
     
+    // Load App Components
+    async function loadAppComponents() {
+        const appGrid = document.querySelector('.app-grid');
+        const appList = document.querySelector('.app-list');
+        
+        // Load app grid components
+        if (appGrid && appGrid.dataset.loaded !== 'true') {
+            const appComponents = [
+                'view/apps/app-card.html'
+                // Add more app cards here
+            ];
+            
+            appGrid.innerHTML = '';
+            
+            let loadedCount = 0;
+            for (const componentPath of appComponents) {
+                const componentHTML = await loadComponent(componentPath);
+                if (componentHTML) {
+                    appGrid.insertAdjacentHTML('beforeend', componentHTML);
+                    loadedCount++;
+                }
+            }
+            
+            if (loadedCount === 0) {
+                appGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #5f6368;">
+                        <span class="material-icons" style="font-size: 48px; display: block; margin-bottom: 16px; opacity: 0.5;">apps</span>
+                        <p>No apps available</p>
+                    </div>
+                `;
+            }
+            
+            appGrid.dataset.loaded = 'true';
+        }
+        
+        // Load app list components (Top Charts)
+        if (appList && appList.dataset.loaded !== 'true') {
+            const appListComponents = [
+                'view/apps/app-list-item.html'
+                // Add more app list items here
+            ];
+            
+            appList.innerHTML = '';
+            
+            let loadedCount = 0;
+            for (const componentPath of appListComponents) {
+                const componentHTML = await loadComponent(componentPath);
+                if (componentHTML) {
+                    appList.insertAdjacentHTML('beforeend', componentHTML);
+                    loadedCount++;
+                }
+            }
+            
+            if (loadedCount === 0) {
+                appList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #5f6368;">
+                        <span class="material-icons" style="font-size: 48px; display: block; margin-bottom: 16px; opacity: 0.5;">trending_up</span>
+                        <p>No top charts available</p>
+                    </div>
+                `;
+            }
+            
+            appList.dataset.loaded = 'true';
+        }
+    }
+
+    // Load app components on page load if Apps tab is active
+    if (document.getElementById('apps-content')?.classList.contains('active')) {
+        loadAppComponents();
+    }
+    
     // Load book components on page load if Books tab is active
     if (document.getElementById('books-content')?.classList.contains('active')) {
         loadBookComponents();
     }
 });
+
+// Book Modal Functions
+function openBookModal(bookId) {
+    const modal = document.getElementById('bookModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalAuthor = document.getElementById('modalAuthor');
+    const modalContent = document.getElementById('modalContent');
+    
+    // Book content data
+    const bookData = {
+        history: {
+            title: 'History of Ormoc City',
+            author: 'Ormoc City Historical Commission',
+            content: `
+                <h3>Early History</h3>
+                <p>The name "Ormoc" is derived from "ogmok," an archaic Visayan term meaning "lowland" or "depressed plain." Before Spanish colonization, the area was inhabited by Malayans who engaged in trade with Chinese, Javanese, and Indonesians. To protect themselves from Moro pirate attacks, the locals developed a warning system using watchtowers to alert the community of impending threats.</p>
+                
+                <h3>Spanish Period (1595-1898)</h3>
+                <p>In 1595, Jesuit missionaries arrived in Leyte, and by May 1597, they had established a mission in Ormoc, converting many locals to Christianity. However, in 1634, the town faced a significant attack when Sultan Raja Bungsu of Sulu captured 300 residents. Despite resistance, the locals were overwhelmed. In 1768, Augustinian missionaries replaced the Jesuits, and on February 26, 1834, Ormoc was officially separated from Palompon, becoming its own municipality.</p>
+                
+                <h3>American Period (1901-1941)</h3>
+                <p>Following the Philippine Revolution, a civil government was established in Leyte on April 22, 1901, under American rule. During this time, revolutionary leader Faustino Ablen inspired locals to join the Pulahan Movement. In 1903, the municipality of Albuera was consolidated into Ormoc.</p>
+                
+                <h3>World War II (1941-1945)</h3>
+                <p>During World War II, Ormoc served as a significant Japanese stronghold and supply base in Leyte. The city was liberated by forces commanded by U.S. General Douglas MacArthur on December 10, 1944, after intense fighting. The contemporary city was rebuilt on the ruins of the old city.</p>
+                
+                <h3>Cityhood (1947)</h3>
+                <p>Ormoc achieved city status on October 20, 1947, through Republic Act No. 179, becoming the fifteenth city in the Philippines and the first in the Eastern Visayas region.</p>
+                
+                <h3>Natural Disasters & Resilience</h3>
+                <p>On November 5, 1991, Tropical Storm Thelma caused flash floods that devastated Ormoc, resulting in nearly 8,000 deaths. The disaster was exacerbated by deforestation and improper land use in the surrounding watershed. More recently, on November 8, 2013, Super Typhoon Haiyan struck the city, causing widespread destruction to 90% of its structures. Despite these challenges, Ormoc has shown remarkable resilience and continues to rebuild and develop.</p>
+                
+                <h3>Recent Developments</h3>
+                <p>In 2022, a plebiscite was held to merge several barangays in Ormoc City. The majority of residents approved the reorganization, leading to the consolidation of 28 barangays into three: Barangay South, Barangay East, and Barangay West.</p>
+            `
+        },
+        geography: {
+            title: 'Geography & Demographics of Ormoc',
+            author: 'Ormoc City Planning Office',
+            content: `
+                <h3>Location & Geography</h3>
+                <p>Ormoc City is located on the western coast of Leyte Island in the Eastern Visayas region of the Philippines. It is strategically positioned and serves as a major commercial and transportation hub in the region.</p>
+                
+                <h3>Topography</h3>
+                <p>The city's name "Ormoc" (from "ogmok") reflects its geographical character as a lowland area. The city features a combination of coastal plains and rolling hills, with the surrounding mountains providing natural resources and scenic beauty.</p>
+                
+                <h3>Climate</h3>
+                <p>Ormoc experiences a tropical climate with two distinct seasons: a dry season from November to April and a wet season from May to October. The city is occasionally affected by typhoons, as evidenced by past natural disasters.</p>
+                
+                <h3>Demographics</h3>
+                <p>Ormoc City has a diverse population with a mix of cultural influences. The city has experienced steady population growth over the years, reflecting its economic development and opportunities. The residents, known as Ormocanons, are primarily Waray-speaking, with English and Tagalog also widely used.</p>
+                
+                <h3>Administrative Divisions</h3>
+                <p>Following the 2022 plebiscite, Ormoc City was reorganized into three major barangays: Barangay South, Barangay East, and Barangay West. This consolidation was aimed at improving governance and service delivery to residents.</p>
+                
+                <h3>Natural Resources</h3>
+                <p>The city and its surrounding areas are rich in natural resources, including agricultural lands, forests, and water resources. Lake Danao, located nearby, is one of the region's most significant natural attractions.</p>
+            `
+        },
+        culture: {
+            title: 'Culture & Traditions of Ormoc',
+            author: 'Ormoc Cultural Heritage Council',
+            content: `
+                <h3>Cultural Identity</h3>
+                <p>The people of Ormoc, known as Ormocanons, have a rich cultural heritage that reflects the city's history and diverse influences. The culture is primarily Waray-based, with elements from Spanish, American, and indigenous traditions.</p>
+                
+                <h3>Language</h3>
+                <p>Waray-Waray is the primary language spoken in Ormoc, though English and Tagalog are also widely used, especially in business and education. The local dialect has unique characteristics that distinguish it from other Waray-speaking areas.</p>
+                
+                <h3>Festivals</h3>
+                <p>The Buyogan Festival is one of Ormoc's most celebrated cultural events. This festival showcases the city's agricultural heritage and features colorful street dancing, cultural performances, and community celebrations. The festival name is derived from "buyog" (bees), symbolizing the hardworking nature of Ormocanons.</p>
+                
+                <h3>Cuisine</h3>
+                <p>Ormoc's cuisine reflects its coastal location and agricultural abundance. Seafood is prominent, with fresh fish and other marine products being staples. Traditional Waray dishes are prepared with local ingredients, and the city is known for its unique culinary traditions.</p>
+                
+                <h3>Arts & Crafts</h3>
+                <p>Local artisans create traditional crafts that reflect Ormoc's cultural heritage. These include woven products, wood carvings, and other handicrafts that showcase the skills and creativity of Ormocanons.</p>
+                
+                <h3>Religious Traditions</h3>
+                <p>With a history of Spanish colonization and Christianization, Ormoc has strong Catholic traditions. Religious festivals and celebrations are important parts of the community's cultural calendar, bringing together families and communities.</p>
+                
+                <h3>Music & Dance</h3>
+                <p>Traditional Waray music and dance forms are preserved and performed during festivals and cultural events. These artistic expressions celebrate the city's history and identity, connecting generations of Ormocanons to their heritage.</p>
+            `
+        },
+        economics: {
+            title: 'Economic Development of Ormoc',
+            author: 'Ormoc City Economic Development Board',
+            content: `
+                <h3>Economic Overview</h3>
+                <p>Ormoc City has established itself as one of the most progressive cities in Eastern Visayas. Its strategic location, natural resources, and business-friendly environment have contributed to sustained economic growth.</p>
+                
+                <h3>Agriculture</h3>
+                <p>Agriculture remains an important sector in Ormoc's economy. The surrounding areas produce rice, coconut, sugarcane, and various fruits and vegetables. The fertile lands and favorable climate support diverse agricultural activities.</p>
+                
+                <h3>Commerce & Trade</h3>
+                <p>As a commercial hub in Western Leyte, Ormoc serves as a trading center for the region. The city has developed modern commercial districts with shopping centers, markets, and business establishments that serve both local residents and visitors.</p>
+                
+                <h3>Energy Sector</h3>
+                <p>Ormoc has significant energy resources and infrastructure. The city and surrounding areas host power generation facilities, contributing to the region's energy supply and creating employment opportunities.</p>
+                
+                <h3>Tourism</h3>
+                <p>Tourism is a growing sector, with attractions like Lake Danao, waterfalls, and historical sites drawing visitors. The city has invested in tourism infrastructure to support this industry's development.</p>
+                
+                <h3>Infrastructure Development</h3>
+                <p>Ormoc has invested heavily in infrastructure, including roads, ports, and utilities. The city's port facilities support trade and transportation, while modern utilities ensure reliable services for residents and businesses.</p>
+                
+                <h3>Investment Climate</h3>
+                <p>The city government has worked to create a favorable environment for investment, with streamlined processes and incentives for businesses. This has attracted both local and foreign investments, contributing to economic diversification and job creation.</p>
+                
+                <h3>Future Prospects</h3>
+                <p>With continued infrastructure development, investment promotion, and sector diversification, Ormoc is positioned for sustained economic growth. The city aims to become an even more prominent economic center in Eastern Visayas.</p>
+            `
+        },
+        tourism: {
+            title: 'Tourism & Attractions in Ormoc',
+            author: 'Ormoc City Tourism Office',
+            content: `
+                <h3>Natural Attractions</h3>
+                <p>Ormoc City and its surrounding areas offer numerous natural attractions that draw visitors from across the Philippines and beyond. The region's natural beauty is one of its greatest assets.</p>
+                
+                <h3>Lake Danao</h3>
+                <p>Lake Danao is one of Ormoc's most famous natural attractions. This beautiful lake, located in the mountains, offers stunning scenery, boating activities, and opportunities for relaxation. The lake's cool climate and pristine environment make it a popular destination for families and nature lovers.</p>
+                
+                <h3>Waterfalls</h3>
+                <p>The area surrounding Ormoc features several beautiful waterfalls that are popular with tourists and locals. These natural wonders provide opportunities for swimming, picnicking, and photography, showcasing the region's natural beauty.</p>
+                
+                <h3>Historical Sites</h3>
+                <p>Ormoc has several historical sites that reflect its rich past. These include monuments, markers, and structures that commemorate significant events in the city's history, particularly related to World War II and the city's liberation.</p>
+                
+                <h3>Cultural Attractions</h3>
+                <p>The Buyogan Festival and other cultural events attract visitors interested in experiencing Ormoc's traditions and heritage. These festivals showcase local culture, music, dance, and cuisine, providing immersive cultural experiences.</p>
+                
+                <h3>Modern Facilities</h3>
+                <p>Ormoc has developed modern tourism facilities including hotels, restaurants, and recreational areas. The city's commercial districts offer shopping, dining, and entertainment options for visitors.</p>
+                
+                <h3>Adventure Tourism</h3>
+                <p>The surrounding mountains and natural areas offer opportunities for hiking, trekking, and other outdoor activities. Adventure tourism is a growing segment, attracting visitors seeking active experiences in nature.</p>
+                
+                <h3>Accessibility</h3>
+                <p>Ormoc's strategic location and transportation infrastructure make it accessible to visitors. The city serves as a gateway to other destinations in Leyte and the Eastern Visayas region, making it an ideal base for exploring the area.</p>
+            `
+        }
+    };
+    
+    if (bookData[bookId]) {
+        modalTitle.textContent = bookData[bookId].title;
+        modalAuthor.textContent = bookData[bookId].author;
+        modalContent.innerHTML = bookData[bookId].content;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+}
+
+function closeBookModal() {
+    const modal = document.getElementById('bookModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto'; // Restore scrolling
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('bookModal');
+    if (event.target === modal) {
+        closeBookModal();
+    }
+}

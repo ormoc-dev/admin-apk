@@ -27,15 +27,15 @@
     <!-- Navigation Tabs -->
     <nav class="nav-tabs">
         <div class="nav-container">
-            <button class="nav-tab active">
+            <button class="nav-tab active" data-tab="apps">
                 <span class="material-icons">apps</span>
                 <span>Apps</span>
             </button>
-            <button class="nav-tab">
+            <button class="nav-tab" data-tab="movies">
                 <span class="material-icons">movie</span>
                 <span>Movies</span>
             </button>
-            <button class="nav-tab">
+            <button class="nav-tab" data-tab="books">
                 <span class="material-icons">book</span>
                 <span>Books</span>
             </button>
@@ -51,60 +51,89 @@
             </div>
         </section>
 
-        <!-- App Categories -->
-        <section class="category-section">
-            <div class="section-header">
-                <h2 class="section-title">Recommended for you</h2>
-                <a href="#" class="see-all">See all</a>
-            </div>
-
-            <div class="app-grid">
-                <div class="app-card">
-                    <div class="app-icon">
-                        <img src="assets/images/app.png" alt="OBO App Icon" class="app-icon-img">
-                    </div>
-                    <div class="app-info">
-                        <h3 class="app-name">OBO</h3>
-                        <p class="app-developer">Ormoc City Admin</p>
-                        <div class="app-rating">
-                            <span class="material-icons star">star</span>
-                            <span class="rating-value">4.5</span>
-                            <span class="rating-count">(1.2M)</span>
-                        </div>
-                    </div>
-                    <a href="https://github.com/ormoc-dev/OBO-MOBILE/releases/download/obo/app-release.apk" class="install-button">Install</a>
+        <!-- Apps Tab Content -->
+        <div id="apps-content" class="tab-content active">
+            <!-- App Categories -->
+            <section class="category-section">
+                <div class="section-header">
+                    <h2 class="section-title">Recommended for you</h2>
+                    <a href="#" class="see-all">See all</a>
                 </div>
 
-                
-            </div>
-        </section>
-
-        <!-- Top Charts Section -->
-        <section class="category-section">
-            <div class="section-header">
-                <h2 class="section-title">Top Charts</h2>
-                <a href="#" class="see-all">See all</a>
-            </div>
-            <div class="app-list">
-                <div class="app-list-item">
-                    <span class="rank-number">1</span>
-                    <div class="app-icon-small">
-                        <img src="assets/images/app.png" alt="Top App 1 Icon" class="app-icon-img-small">
-                    </div>
-                    <div class="app-details">
-                        <h3 class="app-name">OBO</h3>
-                        <p class="app-developer">Omroc City Admin</p>
-                        <div class="app-rating">
-                            <span class="material-icons star">star</span>
-                            <span class="rating-value">4.9</span>
+                <div class="app-grid">
+                    <div class="app-card">
+                        <div class="app-icon">
+                            <img src="assets/images/app.png" alt="OBO App Icon" class="app-icon-img">
                         </div>
+                        <div class="app-info">
+                            <h3 class="app-name">OBO</h3>
+                            <p class="app-developer">Ormoc City Admin</p>
+                            <div class="app-rating">
+                                <span class="material-icons star">star</span>
+                                <span class="rating-value">4.5</span>
+                                <span class="rating-count">(1.2M)</span>
+                            </div>
+                        </div>
+                        <a href="https://github.com/ormoc-dev/OBO-MOBILE/releases/download/obo/app-release.apk" class="install-button">Install</a>
                     </div>
-                    <a href="https://github.com/ormoc-dev/OBO-MOBILE/releases/download/obo/app-release.apk" class="install-button-small">Install</a>
                 </div>
+            </section>
 
-              
-            </div>
-        </section>
+            <!-- Top Charts Section -->
+            <section class="category-section">
+                <div class="section-header">
+                    <h2 class="section-title">Top Charts</h2>
+                    <a href="#" class="see-all">See all</a>
+                </div>
+                <div class="app-list">
+                    <div class="app-list-item">
+                        <span class="rank-number">1</span>
+                        <div class="app-icon-small">
+                            <img src="assets/images/app.png" alt="Top App 1 Icon" class="app-icon-img-small">
+                        </div>
+                        <div class="app-details">
+                            <h3 class="app-name">OBO</h3>
+                            <p class="app-developer">Omroc City Admin</p>
+                            <div class="app-rating">
+                                <span class="material-icons star">star</span>
+                                <span class="rating-value">4.9</span>
+                            </div>
+                        </div>
+                        <a href="https://github.com/ormoc-dev/OBO-MOBILE/releases/download/obo/app-release.apk" class="install-button-small">Install</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Movies Tab Content -->
+        <div id="movies-content" class="tab-content">
+            <section class="category-section">
+                <div class="section-header">
+                    <h2 class="section-title">Featured Videos</h2>
+                    <a href="#" class="see-all">See all</a>
+                </div>
+                <div class="video-grid">
+                    <!-- Video components will be loaded here dynamically -->
+                    <div class="loading-placeholder" style="text-align: center; padding: 40px; color: #5f6368;">
+                        <span class="material-icons" style="font-size: 48px; display: block; margin-bottom: 16px; opacity: 0.5;">movie</span>
+                        <p>Loading videos...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Books Tab Content -->
+        <div id="books-content" class="tab-content">
+            <section class="category-section">
+                <div class="section-header">
+                    <h2 class="section-title">Coming Soon</h2>
+                </div>
+                <div class="empty-state">
+                    <span class="material-icons empty-icon">book</span>
+                    <p>Books section coming soon</p>
+                </div>
+            </section>
+        </div>
     </main>
 
     <script src="assets/js/script.js"></script>

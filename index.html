@@ -6,6 +6,7 @@
     <title>ADMIN APK RELEASE</title>
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/badge.css" />
+    <link rel="stylesheet" href="assets/css/modal.css" />
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
@@ -188,21 +189,39 @@
       </div>
     </footer>
 
-    <!-- Book Modal -->
-    <div id="bookModal" class="book-modal">
-      <div class="book-modal-content">
-        <div class="book-modal-header">
-          <h2 id="modalTitle" class="modal-title"></h2>
-          <button class="modal-close" onclick="closeBookModal()">
-            <span class="material-icons">close</span>
-          </button>
-        </div>
-        <div class="book-modal-body">
-          <p id="modalAuthor" class="modal-author"></p>
-          <div id="modalContent" class="modal-content"></div>
+       <!-- Book Modal -->
+       <div id="bookModal" class="book-modal">
+        <div class="book-modal-content">
+          <div class="newspaper-header">
+            <div class="newspaper-masthead">
+              <div class="masthead-left">
+                <button class="modal-close" onclick="closeBookModal()">
+                  <span class="material-icons">close</span>
+                </button>
+                <span class="newspaper-name">ORMOC CITY</span>
+                <span class="newspaper-tagline">LIBRARY GAZETTE</span>
+              </div>
+              <div class="masthead-center">
+                <div class="newspaper-date" id="modalDate"></div>
+              </div>
+              <div class="masthead-right">
+                <span class="newspaper-volume">VOL. I</span>
+              </div>
+            </div>
+            <div class="newspaper-divider"></div>
+          </div>
+          <div class="book-modal-header">
+            <h1 id="modalTitle" class="modal-title"></h1>
+          
+          </div>
+          <div class="book-modal-body">
+            <div class="newspaper-byline">
+              <p id="modalAuthor" class="modal-author"></p>
+            </div>
+            <div id="modalContent" class="modal-content newspaper-columns"></div>
+          </div>
         </div>
       </div>
-    </div>
 
     <script src="assets/js/script.js"></script>
   </body>

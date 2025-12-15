@@ -507,8 +507,15 @@ function openBookModal(bookId) {
         modalAuthor.textContent = bookData[bookId].author;
         modalContent.innerHTML = bookData[bookId].content;
         modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        document.body.style.overflow = 'hidden'; 
     }
+    const modalDate = document.getElementById('modalDate');
+    if (modalDate) {
+        const today = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        modalDate.textContent = today.toLocaleDateString('en-US', options).toUpperCase();
+    }
+
 }
 
 function closeBookModal() {

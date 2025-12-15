@@ -1,153 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ADMIN APK RELEASE</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/badge.css" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <!-- Header -->
     <header class="header">
-        <div class="header-content">
-            <div class="logo-section">
-                <span class="material-icons logo-icon">android</span>
-                <h1 class="logo-text">Ormoc City APK</h1>
-            </div>
-            <div class="search-container">
-                <span class="material-icons search-icon">search</span>
-                <input type="text" class="search-input" placeholder="Search apps">
-            </div>
-           
+      <div class="header-content">
+        <div class="logo-section">
+          <span class="material-icons logo-icon">android</span>
+          <h1 class="logo-text">LGU APK</h1>
         </div>
+        <div class="search-container">
+          <span class="material-icons search-icon">search</span>
+          <input type="text" class="search-input" placeholder="Search apps" />
+        </div>
+      </div>
     </header>
 
     <!-- Navigation Tabs -->
     <nav class="nav-tabs">
-        <div class="nav-container">
-            <button class="nav-tab active" data-tab="apps">
-                <span class="material-icons">apps</span>
-                <span>Apps</span>
-            </button>
-            <button class="nav-tab" data-tab="movies">
-                <span class="material-icons">movie</span>
-                <span>Movies</span>
-            </button>
-            <button class="nav-tab" data-tab="books">
-                <span class="material-icons">book</span>
-                <span>Books</span>
-            </button>
-        </div>
+      <div class="nav-container">
+        <button class="nav-tab active" data-tab="apps">
+          <span class="material-icons">apps</span>
+          <span>Apps</span>
+        </button>
+        <button class="nav-tab" data-tab="movies">
+          <span class="material-icons">movie</span>
+          <span>Movies</span>
+        </button>
+        <button class="nav-tab" data-tab="books">
+          <span class="material-icons">book</span>
+          <span>Books</span>
+        </button>
+      </div>
     </nav>
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Hero Banner -->
- <section class="hero-banner">
-    <div class="banner-content">
-       <img class="banner-image" src="assets/images/hero.jpg" alt="Banner">
-    </div>
-</section>
-
-        <!-- Apps Tab Content -->
-        <div id="apps-content" class="tab-content active">
-            <!-- App Categories -->
-            <section class="category-section">
-                <div class="section-header">
-                    <h2 class="section-title">Recommended for you</h2>
-                    <a href="#" class="see-all">See all</a>
-                </div>
-
-                <div class="app-grid">
-                    <!-- App components will be loaded here dynamically -->
-                    <div class="loading-placeholder" style="text-align: center; padding: 40px; color: #5f6368;">
-                        <span class="material-icons" style="font-size: 48px; display: block; margin-bottom: 16px; opacity: 0.5;">apps</span>
-                        <p>Loading apps...</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Top Charts Section -->
-            <section class="category-section">
-                <div class="section-header">
-                    <h2 class="section-title">Top Charts</h2>
-                    <a href="#" class="see-all">See all</a>
-                </div>
-                <div class="app-list">
-                    <!-- App list components will be loaded here dynamically -->
-                    <div class="loading-placeholder" style="text-align: center; padding: 40px; color: #5f6368;">
-                        <span class="material-icons" style="font-size: 48px; display: block; margin-bottom: 16px; opacity: 0.5;">trending_up</span>
-                        <p>Loading top charts...</p>
-                    </div>
-                </div>
-            </section>
+      <!-- Hero Banner -->
+      <section class="hero-banner">
+        <div class="banner-content">
+          <img class="banner-image" src="assets/images/hero.jpg" alt="Banner" />
         </div>
+      </section>
 
-        <!-- Movies Tab Content -->
-        <div id="movies-content" class="tab-content">
-            <section class="category-section">
-                <div class="section-header">
-                    <h2 class="section-title">Featured Videos</h2>
-                    <a href="#" class="see-all">See all</a>
-                </div>
-                <div class="video-grid">
-                    <!-- Video components will be loaded here dynamically -->
-                    <div class="loading-placeholder" style="text-align: center; padding: 40px; color: #5f6368;">
-                        <span class="material-icons" style="font-size: 48px; display: block; margin-bottom: 16px; opacity: 0.5;">movie</span>
-                        <p>Loading videos...</p>
-                    </div>
-                </div>
-            </section>
-        </div>
+      <!-- Apps Tab Content -->
+      <div id="apps-content" class="tab-content active">
+        <!-- App Categories -->
+        <section class="category-section">
+          <div class="section-header">
+            <h2 class="section-title">Recommended for you</h2>
+            <a href="#" class="see-all">See all</a>
+          </div>
 
-        <!-- Books Tab Content -->
-        <div id="books-content" class="tab-content">
-            <section class="category-section">
-                <div class="section-header">
-                    <h2 class="section-title">Ormoc City Library</h2>
-                    <a href="#" class="see-all">View all</a>
-                </div>
-                <div class="books-grid">
-                    <!-- Book components will be loaded here dynamically -->
-                    <div class="loading-placeholder" style="text-align: center; padding: 40px; color: #5f6368;">
-                        <span class="material-icons" style="font-size: 48px; display: block; margin-bottom: 16px; opacity: 0.5;">menu_book</span>
-                        <p>Loading books...</p>
-                    </div>
-                </div>
-            </section>
-        </div>
+          <div class="app-grid">
+            <!-- App components will be loaded here dynamically -->
+            <div
+              class="loading-placeholder"
+              style="text-align: center; padding: 40px; color: #5f6368"
+            >
+              <span
+                class="material-icons"
+                style="
+                  font-size: 48px;
+                  display: block;
+                  margin-bottom: 16px;
+                  opacity: 0.5;
+                "
+                >apps</span
+              >
+              <p>Loading apps...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Top Charts Section -->
+        <section class="category-section">
+          <div class="section-header">
+            <h2 class="section-title">Top Charts</h2>
+            <a href="#" class="see-all">See all</a>
+          </div>
+          <div class="app-list">
+            <!-- App list components will be loaded here dynamically -->
+            <div
+              class="loading-placeholder"
+              style="text-align: center; padding: 40px; color: #5f6368"
+            >
+              <span
+                class="material-icons"
+                style="
+                  font-size: 48px;
+                  display: block;
+                  margin-bottom: 16px;
+                  opacity: 0.5;
+                "
+                >trending_up</span
+              >
+              <p>Loading top charts...</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Movies Tab Content -->
+      <div id="movies-content" class="tab-content">
+        <section class="category-section">
+          <div class="section-header">
+            <h2 class="section-title">Featured Videos</h2>
+            <a href="#" class="see-all">See all</a>
+          </div>
+          <div class="video-grid">
+            <!-- Video components will be loaded here dynamically -->
+            <div
+              class="loading-placeholder"
+              style="text-align: center; padding: 40px; color: #5f6368"
+            >
+              <span
+                class="material-icons"
+                style="
+                  font-size: 48px;
+                  display: block;
+                  margin-bottom: 16px;
+                  opacity: 0.5;
+                "
+                >movie</span
+              >
+              <p>Loading videos...</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Books Tab Content -->
+      <div id="books-content" class="tab-content">
+        <section class="category-section">
+          <div class="section-header">
+            <h2 class="section-title">Ormoc City Library</h2>
+            <a href="#" class="see-all">View all</a>
+          </div>
+          <div class="books-grid">
+            <!-- Book components will be loaded here dynamically -->
+            <div
+              class="loading-placeholder"
+              style="text-align: center; padding: 40px; color: #5f6368"
+            >
+              <span
+                class="material-icons"
+                style="
+                  font-size: 48px;
+                  display: block;
+                  margin-bottom: 16px;
+                  opacity: 0.5;
+                "
+                >menu_book</span
+              >
+              <p>Loading books...</p>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <p class="footer-text">© 2025 Ormoc City APK. All rights reserved.</p>
-            </div>
-            <div class="footer-section">
-                <p class="footer-developer">Developed by <span class="developer-name">Anthony Capuyan</span></p>
-            </div>
+      <div class="footer-content">
+        <div class="footer-section">
+          <p class="footer-text">© 2025 Ormoc City APK. All rights reserved.</p>
         </div>
+        <div class="footer-section">
+          <p class="footer-developer">
+            Developed by <span class="developer-name">Anthony Capuyan</span>
+          </p>
+        </div>
+      </div>
     </footer>
 
     <!-- Book Modal -->
     <div id="bookModal" class="book-modal">
-        <div class="book-modal-content">
-            <div class="book-modal-header">
-                <h2 id="modalTitle" class="modal-title"></h2>
-                <button class="modal-close" onclick="closeBookModal()">
-                    <span class="material-icons">close</span>
-                </button>
-            </div>
-            <div class="book-modal-body">
-                <p id="modalAuthor" class="modal-author"></p>
-                <div id="modalContent" class="modal-content"></div>
-            </div>
+      <div class="book-modal-content">
+        <div class="book-modal-header">
+          <h2 id="modalTitle" class="modal-title"></h2>
+          <button class="modal-close" onclick="closeBookModal()">
+            <span class="material-icons">close</span>
+          </button>
         </div>
+        <div class="book-modal-body">
+          <p id="modalAuthor" class="modal-author"></p>
+          <div id="modalContent" class="modal-content"></div>
+        </div>
+      </div>
     </div>
 
     <script src="assets/js/script.js"></script>
-</body>
+  </body>
 </html>

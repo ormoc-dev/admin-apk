@@ -1,0 +1,62 @@
+/* Beta Badge Styles */
+.beta-badge {
+    display: inline-block;
+    color: #ffffff;
+    font-size: 8px;
+    font-weight: 600;
+    padding: 2px 5px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(238, 90, 111, 0.3);
+    white-space: nowrap;
+}
+
+.beta-badge-corner {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: inline-block;
+    background: linear-gradient(135deg, #9f079f 0%, #ee5a6f 100%);
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(238, 90, 111, 0.3);
+    z-index: 10;
+}
+
+.app-card {
+    position: relative; /* Add this if using Option 2 */
+    /* ... existing styles ... */
+}
+
+/* Responsive adjustments for beta badge */
+@media (max-width: 480px) {
+    .beta-badge {
+        font-size: 5px;
+        padding: 2px 4px;
+    }
+    
+    .beta-badge-corner {
+        font-size: 8px;
+        padding: 3px 6px;
+        top: 6px;
+        right: 6px;
+    }
+}
+
+@media (max-width: 360px) {
+    .beta-badge {
+        font-size: 5px;
+        padding: 2px 4px;
+    }
+    
+    .beta-badge-corner {
+        font-size: 7px;
+        padding: 2px 5px;
+    }
+}

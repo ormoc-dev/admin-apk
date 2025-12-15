@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -813,7 +814,7 @@ body {
 .footer {
     background-color: #ffffff;
     border-top: 1px solid #e8eaed;
-    padding: 32px 24px;
+    padding: 12px 14px;
     margin-top: 48px;
 }
 
@@ -834,13 +835,13 @@ body {
 }
 
 .footer-text {
-    font-size: 14px;
+    font-size: 12px;
     color: #5f6368;
     margin: 0;
 }
 
 .footer-developer {
-    font-size: 14px;
+    font-size: 12px;
     color: #5f6368;
     margin: 0;
 }
@@ -997,6 +998,9 @@ body {
     }
 }
 
+
+
+
 @media (max-width: 768px) {
     .header-content {
         flex-wrap: wrap;
@@ -1016,7 +1020,9 @@ body {
     .nav-container {
         padding: 0 16px;
     }
-
+   .app-details{
+    padding: 5px !important;
+   }
     .main-content {
         padding: 16px;
     }
@@ -1024,6 +1030,47 @@ body {
     .app-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 12px;
+    }
+
+    /* App Card Responsive Styles */
+    .app-card {
+        padding: 14px;
+        border-radius: 10px;
+    }
+
+    .app-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 18px;
+        margin-bottom: 10px;
+    }
+
+    .app-info {
+        margin-bottom: 10px;
+    }
+
+    .app-name {
+        font-size: 15px;
+    }
+
+    .app-developer {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+
+    .app-rating {
+        font-size: 13px;
+        gap: 3px;
+    }
+
+    .app-rating .star {
+        font-size: 15px;
+    }
+
+    .install-button {
+        padding: 9px 14px;
+        font-size: 13px;
+        border-radius: 18px;
     }
 
     .hero-banner {
@@ -1037,26 +1084,151 @@ body {
     .app-list-item {
         padding: 12px;
         gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .rank-number {
+        font-size: 18px;
+        min-width: 28px;
+    }
+
+    .app-icon-small {
+        width: 48px;
+        height: 48px;
+    }
+
+    .app-details .app-name {
+        font-size: 15px;
+    }
+
+    .app-details .app-developer {
+        font-size: 13px;
     }
 
     .install-button-small {
         padding: 6px 16px;
         font-size: 12px;
+        white-space: nowrap;
     }
 }
 
 @media (max-width: 480px) {
     .app-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    /* App Card Responsive Styles for Mobile */
+    .app-card {
+        padding: 12px;
+        border-radius: 8px;
     }
 
     .app-icon {
         width: 64px;
         height: 64px;
+        border-radius: 16px;
+        margin-bottom: 8px;
     }
 
-    .app-icon .material-icons {
-        font-size: 36px;
+    .app-icon-img {
+        border-radius: 16px;
+    }
+
+    .app-info {
+        margin-bottom: 8px;
+    }
+
+    .app-name {
+        font-size: 14px;
+        margin-bottom: 3px;
+    }
+
+    .app-developer {
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+
+    .app-rating {
+        font-size: 12px;
+        gap: 2px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .app-rating .star {
+        font-size: 14px;
+    }
+
+    .rating-value {
+        font-size: 12px;
+    }
+
+    .rating-count {
+        font-size: 11px;
+        display: block;
+        width: 100%;
+        margin-top: 2px;
+    }
+
+    .install-button {
+        padding: 8px 12px;
+        font-size: 12px;
+        border-radius: 16px;
+    }
+
+    /* Top Charts Responsive Styles */
+    .app-list {
+        border-radius: 8px;
+    }
+
+    .app-list-item {
+        padding: 10px;
+        gap: 10px;
+        flex-wrap: nowrap;
+    }
+
+    .rank-number {
+        font-size: 16px;
+        min-width: 24px;
+    }
+
+    .app-icon-small {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+    }
+
+    .app-details {
+        min-width: 0;
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .app-details .app-name {
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .app-details .app-developer {
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
+
+    .app-details .app-rating {
+        font-size: 12px;
+        gap: 2px;
+    }
+
+    .app-details .app-rating .star {
+        font-size: 14px;
+    }
+
+    .install-button-small {
+        padding: 6px 12px;
+        font-size: 11px;
+        white-space: nowrap;
+        flex-shrink: 0;
     }
 
     .video-grid {
@@ -1110,6 +1282,101 @@ body {
 
 /* Extra small screens */
 @media (max-width: 360px) {
+    .app-grid {
+        gap: 8px;
+    }
+
+    /* App Card Responsive Styles for Extra Small Screens */
+    .app-card {
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .app-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        margin-bottom: 6px;
+    }
+
+    .app-icon-img {
+        border-radius: 14px;
+    }
+
+    .app-info {
+        margin-bottom: 6px;
+    }
+
+    .app-name {
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    .app-developer {
+        font-size: 11px;
+        margin-bottom: 4px;
+    }
+
+    .app-rating {
+        font-size: 11px;
+        gap: 2px;
+    }
+
+    .app-rating .star {
+        font-size: 12px;
+    }
+
+    .rating-value {
+        font-size: 11px;
+    }
+
+    .rating-count {
+        font-size: 10px;
+    }
+
+    .install-button {
+        padding: 7px 10px;
+        font-size: 11px;
+        border-radius: 14px;
+    }
+
+    .app-list-item {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .rank-number {
+        font-size: 14px;
+        min-width: 20px;
+    }
+
+    .app-icon-small {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+    }
+
+    .app-details .app-name {
+        font-size: 13px;
+    }
+
+    .app-details .app-developer {
+        font-size: 11px;
+    }
+
+    .app-details .app-rating {
+        font-size: 11px;
+    }
+
+    .app-details .app-rating .star {
+        font-size: 12px;
+    }
+
+    .install-button-small {
+        padding: 5px 10px;
+        font-size: 10px;
+    }
+
     .video-grid {
         gap: 12px;
     }
@@ -1186,4 +1453,3 @@ body {
         font-size: 14px;
     }
 }
-

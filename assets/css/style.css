@@ -12,6 +12,35 @@ body {
     line-height: 1.6;
 }
 
+.btn-primary {
+    background-color: #1a73e8;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-primary:hover {
+    background-color: #1557b0;
+}
+
+.btn-text {
+    background: transparent;
+    border: none;
+    color: #1a73e8;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 8px 10px;
+    text-decoration: none;
+}
+
 /* Header Styles */
 .header {
     background-color: #ffffff;
@@ -167,6 +196,57 @@ body {
     padding: 24px;
 }
 
+/* Filter bar */
+.filter-bar {
+    background: #ffffff;
+    border: 1px solid #e8eaed;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    align-items: center;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #5f6368;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.chip {
+    border: 1px solid #dadce0;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.chip.active {
+    background: #e8f0fe;
+    border-color: #1a73e8;
+    color: #1a73e8;
+}
+
+.sort-select {
+    padding: 6px 10px;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
 /* Hero Banner */
 .hero-banner {
     border-radius: 12px;
@@ -270,6 +350,22 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 16px;
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f1f3f4 25%, #e8eaed 37%, #f1f3f4 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease infinite;
+    border-radius: 8px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: -100% 0;
+    }
 }
 
 .app-card {
@@ -677,6 +773,203 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 24px;
     align-items: start;
+}
+
+/* Analytics banner */
+.analytics-banner {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    max-width: 420px;
+    margin-left: auto;
+    background: #1a73e8;
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    display: none;
+    justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    z-index: 1200;
+}
+
+.analytics-banner__text {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.analytics-banner__title {
+    margin: 0;
+    font-weight: 700;
+}
+
+.analytics-banner__desc {
+    margin: 4px 0 0;
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+.analytics-banner__actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Admin lock */
+.admin-lock {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1500;
+}
+
+.admin-lock__card {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    width: 320px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.admin-lock__hint {
+    color: #5f6368;
+    margin: 6px 0 14px;
+}
+
+.admin-lock__input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.admin-lock__actions {
+    display: flex;
+    gap: 10px;
+}
+
+.admin-lock__error {
+    color: #c62828;
+    min-height: 18px;
+    font-size: 13px;
+}
+
+/* App detail drawer */
+.app-detail {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1300;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.app-detail__panel {
+    background: #ffffff;
+    width: min(900px, 100%);
+    max-height: 90vh;
+    overflow: auto;
+    border-radius: 12px;
+    position: relative;
+    padding: 24px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+
+.app-detail__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    border: 1px solid #dadce0;
+    background: #ffffff;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+}
+
+.app-detail__header {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.app-detail__icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    background: #f1f3f4;
+    overflow: hidden;
+}
+
+.app-detail__icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.app-detail__dev {
+    margin: 4px 0;
+    color: #5f6368;
+}
+
+.app-detail__meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    color: #5f6368;
+    font-size: 13px;
+}
+
+.app-detail__body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.app-detail__label {
+    font-weight: 700;
+    margin: 0;
+}
+
+.app-detail__checksums {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.app-detail__checksums code {
+    background: #f1f3f4;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.app-detail__actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.empty-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 24px;
+    color: #5f6368;
 }
 
 /* Book Card - Formal Design */

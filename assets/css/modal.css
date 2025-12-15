@@ -217,6 +217,19 @@
     background-color: transparent;
 }
 
+.book-modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.scroll-hint {
+    font-size: 13px;
+    color: #5a4a3a;
+    opacity: 0.85;
+}
+
 .newspaper-byline {
     margin-bottom: 24px;
     padding-bottom: 16px;

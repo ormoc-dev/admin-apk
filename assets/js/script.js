@@ -3,7 +3,27 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     const installButtons = document.querySelectorAll('.install-button, .install-button-small');
-    let isDownloading = false; // Track download state to prevent double downloads
+    const searchInput = document.querySelector('.search-input');
+    const filterChips = document.querySelectorAll('.filter-chip');
+    const sortSelect = document.getElementById('sortSelect');
+    const analyticsBanner = document.getElementById('analyticsBanner');
+    const analyticsAccept = document.getElementById('analyticsAccept');
+    const analyticsDecline = document.getElementById('analyticsDecline');
+    const adminLock = document.getElementById('adminLock');
+    const adminLockInput = document.getElementById('adminLockInput');
+    const adminLockSubmit = document.getElementById('adminLockSubmit');
+    const adminLockReset = document.getElementById('adminLockReset');
+    const adminLockError = document.getElementById('adminLockError');
+    const bookPrint = document.getElementById('bookPrint');
+    const appDetail = document.getElementById('appDetail');
+    const appDetailClose = document.getElementById('appDetailClose');
+    let isDownloading = false;
+    let filterDebounce;
+    const filterState = { query: '', category: 'all', rating: 'all', sort: 'popular' };
+    const ANALYTICS_KEY = 'apk-analytics-optin';
+    const ANALYTICS_EVENTS = 'apk-analytics-events';
+    const ADMIN_UNLOCK = 'apk-admin-unlocked';
+    const ADMIN_PIN = '2468';
     
     installButtons.forEach(button => {
         button.addEventListener('click', function(e) {
@@ -21,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Download URL not configured');
                 return false;
             }
+            logEvent('install-click', { href: url });
             
             // Mark as downloading
             isDownloading = true;
@@ -127,6 +148,164 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Simple debounce helper for inputs
+    function debounce(fn, delay = 150) {
+        return function(...args) {
+            clearTimeout(filterDebounce);
+            filterDebounce = setTimeout(() => fn.apply(this, args), delay);
+        };
+    }
+
+    function logEvent(type, payload = {}) {
+        const opt = localStorage.getItem(ANALYTICS_KEY);
+        if (opt !== 'true') return;
+        const events = JSON.parse(localStorage.getItem(ANALYTICS_EVENTS) || '[]');
+        events.push({ type, payload, ts: Date.now() });
+        localStorage.setItem(ANALYTICS_EVENTS, JSON.stringify(events.slice(-200)));
+    }
+
+    function setAnalyticsOptIn(allowed) {
+        localStorage.setItem(ANALYTICS_KEY, allowed ? 'true' : 'false');
+        if (analyticsBanner) analyticsBanner.style.display = 'none';
+    }
+
+    function showAnalyticsBannerIfNeeded() {
+        const opt = localStorage.getItem(ANALYTICS_KEY);
+        if (opt === null && analyticsBanner) {
+            analyticsBanner.style.display = 'flex';
+        } else if (analyticsBanner) {
+            analyticsBanner.style.display = 'none';
+        }
+    }
+
+    function restoreText(el, selectors) {
+        selectors.forEach(sel => {
+            const node = el.querySelector(sel);
+            if (node && node.dataset.originalText) {
+                node.textContent = node.dataset.originalText;
+            }
+        });
+    }
+
+    function highlightMatches(el, query, selectors) {
+        if (!query) return;
+        const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')})`, 'gi');
+        selectors.forEach(sel => {
+            const node = el.querySelector(sel);
+            if (node) {
+                if (!node.dataset.originalText) {
+                    node.dataset.originalText = node.textContent;
+                } else {
+                    node.textContent = node.dataset.originalText;
+                }
+                node.innerHTML = node.textContent.replace(regex, '<mark>$1</mark>');
+            }
+        });
+    }
+
+    // Filter Apps and Top Charts by search query + filters
+    async function filterApps(query) {
+        filterState.query = (query || '').trim().toLowerCase();
+
+        await loadAppComponents();
+
+        const appGrid = document.querySelector('.app-grid');
+        const appList = document.querySelector('.app-list');
+        const appCards = Array.from(appGrid?.querySelectorAll('.app-card') || []);
+        const appListItems = Array.from(appList?.querySelectorAll('.app-list-item') || []);
+        const minRating = filterState.rating === 'all' ? 0 : parseFloat(filterState.rating);
+
+        const matches = (el) => {
+            const name = el.querySelector('.app-name')?.textContent.toLowerCase() || '';
+            const dev = el.querySelector('.app-developer')?.textContent.toLowerCase() || '';
+            const category = el.dataset.category || 'all';
+            const rating = parseFloat(el.dataset.rating || '0');
+            const textOk = !filterState.query || name.includes(filterState.query) || dev.includes(filterState.query);
+            const catOk = filterState.category === 'all' || category === filterState.category;
+            const ratingOk = rating >= minRating;
+            return textOk && catOk && ratingOk;
+        };
+
+        appCards.forEach(card => {
+            const show = matches(card);
+            card.style.display = show ? '' : 'none';
+            restoreText(card, ['.app-name', '.app-developer']);
+            if (show) highlightMatches(card, filterState.query, ['.app-name', '.app-developer']);
+        });
+
+        appListItems.forEach(item => {
+            const show = matches(item);
+            item.style.display = show ? '' : 'none';
+            restoreText(item, ['.app-name', '.app-developer']);
+            if (show) highlightMatches(item, filterState.query, ['.app-name', '.app-developer']);
+        });
+
+        // Sort grid cards
+        if (filterState.sort !== 'popular' && appGrid) {
+            const sorted = [...appCards].filter(c => c.style.display !== 'none');
+            sorted.sort((a, b) => {
+                if (filterState.sort === 'name') {
+                    return a.querySelector('.app-name').textContent.localeCompare(b.querySelector('.app-name').textContent);
+                }
+                if (filterState.sort === 'rating') {
+                    return parseFloat(b.dataset.rating || '0') - parseFloat(a.dataset.rating || '0');
+                }
+                return 0;
+            });
+            sorted.forEach(card => appGrid.appendChild(card));
+        }
+
+        // Empty message
+        const anyVisible = [...appCards, ...appListItems].some(el => el.style.display !== 'none');
+        const existing = document.getElementById('apps-empty');
+        if (!anyVisible) {
+            if (!existing && appGrid) {
+                const div = document.createElement('div');
+                div.id = 'apps-empty';
+                div.className = 'empty-msg';
+                div.innerHTML = `<span class="material-icons" style="opacity:0.6;vertical-align:middle;margin-right:6px;">search_off</span>No results. Try a different query or clear filters.`;
+                appGrid.appendChild(div);
+            }
+        } else if (existing) {
+            existing.remove();
+        }
+    }
+
+    // Hook search input
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce((e) => {
+            filterApps(e.target.value);
+            logEvent('search', { q: e.target.value });
+        }));
+    }
+
+    // Filter chips
+    filterChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            const cat = chip.dataset.filterCategory;
+            const rating = chip.dataset.filterRating;
+            if (cat) {
+                filterState.category = cat;
+                filterChips.forEach(c => { if (c.dataset.filterCategory) c.classList.remove('active'); });
+                chip.classList.add('active');
+            }
+            if (rating) {
+                filterState.rating = rating;
+                filterChips.forEach(c => { if (c.dataset.filterRating) c.classList.remove('active'); });
+                chip.classList.add('active');
+            }
+            filterApps(filterState.query);
+        });
+    });
+
+    // Sort select
+    if (sortSelect) {
+        sortSelect.addEventListener('change', (e) => {
+            filterState.sort = e.target.value;
+            filterApps(filterState.query);
+        });
+    }
+
     // Tab Switching Functionality
     const navTabs = document.querySelectorAll('.nav-tab');
     const tabContents = document.querySelectorAll('.tab-content');
@@ -165,8 +344,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     loadAppComponents();
                 }
             }
+
+            logEvent('tab-view', { tab: targetTab });
         });
     });
+
+    // Analytics banner actions
+    if (analyticsAccept) analyticsAccept.onclick = () => setAnalyticsOptIn(true);
+    if (analyticsDecline) analyticsDecline.onclick = () => setAnalyticsOptIn(false);
+    showAnalyticsBannerIfNeeded();
 
     // Component Loader Function
     async function loadComponent(filePath) {
@@ -207,11 +393,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Load all components
         let loadedCount = 0;
+        let hadError = false;
         for (const componentPath of videoComponents) {
             const componentHTML = await loadComponent(componentPath);
             if (componentHTML) {
                 videoGrid.insertAdjacentHTML('beforeend', componentHTML);
                 loadedCount++;
+            } else {
+                hadError = true;
             }
         }
 
@@ -220,7 +409,7 @@ document.addEventListener('DOMContentLoaded', function() {
             videoGrid.innerHTML = `
                 <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #5f6368;">
                     <span class="material-icons" style="font-size: 48px; display: block; margin-bottom: 16px; opacity: 0.5;">movie</span>
-                    <p>No videos available</p>
+                    <p>${hadError ? 'Unable to load videos (offline?). Please retry.' : 'No videos available'}</p>
                 </div>
             `;
         }
@@ -254,11 +443,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Load all components
         let loadedCount = 0;
+        let hadError = false;
         for (const componentPath of bookComponents) {
             const componentHTML = await loadComponent(componentPath);
             if (componentHTML) {
                 booksGrid.insertAdjacentHTML('beforeend', componentHTML);
                 loadedCount++;
+            } else {
+                hadError = true;
             }
         }
 
@@ -267,7 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
             booksGrid.innerHTML = `
                 <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #5f6368;">
                     <span class="material-icons" style="font-size: 48px; display: block; margin-bottom: 16px; opacity: 0.5;">menu_book</span>
-                    <p>No books available</p>
+                    <p>${hadError ? 'Unable to load books (offline?). Please retry.' : 'No books available'}</p>
                 </div>
             `;
         }
@@ -296,11 +488,14 @@ document.addEventListener('DOMContentLoaded', function() {
             appGrid.innerHTML = '';
             
             let loadedCount = 0;
+            let hadErrorGrid = false;
             for (const componentPath of appComponents) {
                 const componentHTML = await loadComponent(componentPath);
                 if (componentHTML) {
                     appGrid.insertAdjacentHTML('beforeend', componentHTML);
                     loadedCount++;
+                } else {
+                    hadErrorGrid = true;
                 }
             }
             
@@ -308,7 +503,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 appGrid.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #5f6368;">
                         <span class="material-icons" style="font-size: 48px; display: block; margin-bottom: 16px; opacity: 0.5;">apps</span>
-                        <p>No apps available</p>
+                        <p>${hadErrorGrid ? 'Unable to load apps (offline?). Please retry.' : 'No apps available'}</p>
                     </div>
                 `;
             }
@@ -326,11 +521,14 @@ document.addEventListener('DOMContentLoaded', function() {
             appList.innerHTML = '';
             
             let loadedCount = 0;
+            let hadErrorList = false;
             for (const componentPath of appListComponents) {
                 const componentHTML = await loadComponent(componentPath);
                 if (componentHTML) {
                     appList.insertAdjacentHTML('beforeend', componentHTML);
                     loadedCount++;
+                } else {
+                    hadErrorList = true;
                 }
             }
             
@@ -338,13 +536,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 appList.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: #5f6368;">
                         <span class="material-icons" style="font-size: 48px; display: block; margin-bottom: 16px; opacity: 0.5;">trending_up</span>
-                        <p>No top charts available</p>
+                        <p>${hadErrorList ? 'Unable to load top charts (offline?). Please retry.' : 'No top charts available'}</p>
                     </div>
                 `;
             }
             
             appList.dataset.loaded = 'true';
         }
+
+        // Bind detail openers
+        document.querySelectorAll('.app-card, .app-list-item').forEach(el => {
+            el.onclick = () => openAppDetail(el);
+        });
+
+        // Re-apply filters after load
+        filterApps(filterState.query);
     }
 
     // Load app components on page load if Apps tab is active
@@ -357,6 +563,107 @@ document.addEventListener('DOMContentLoaded', function() {
         loadBookComponents();
     }
 });
+
+// App detail drawer
+const appDetailTitle = document.getElementById('appDetailTitle');
+const appDetailDeveloper = document.getElementById('appDetailDeveloper');
+const appDetailVersion = document.getElementById('appDetailVersion');
+const appDetailSize = document.getElementById('appDetailSize');
+const appDetailRating = document.getElementById('appDetailRating');
+const appDetailChangelog = document.getElementById('appDetailChangelog');
+const appDetailChecksum = document.getElementById('appDetailChecksum');
+const appDetailInstall = document.getElementById('appDetailInstall');
+const appDetailIcon = document.getElementById('appDetailIcon');
+const appSource = document.getElementById('appSource');
+const copyChecksum = document.getElementById('copyChecksum');
+let lastFocusedElement = null;
+
+function trapFocus(modal, onClose) {
+    const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    function handleTrap(e) {
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            onClose();
+        }
+        if (e.key === 'Tab') {
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        }
+    }
+    modal.addEventListener('keydown', handleTrap);
+    return () => modal.removeEventListener('keydown', handleTrap);
+}
+
+let removeAppTrap = null;
+
+function openAppDetail(el) {
+    if (!appDetail) return;
+    lastFocusedElement = document.activeElement;
+    const name = el.querySelector('.app-name')?.textContent || '';
+    const dev = el.querySelector('.app-developer')?.textContent || '';
+    const rating = el.dataset.rating || '';
+    const size = el.dataset.size || '';
+    const version = el.dataset.version || '';
+    const changelog = el.dataset.changelog || '';
+    const checksum = el.dataset.checksum || '';
+    const source = el.dataset.source || '#';
+    const href = el.querySelector('a[href]')?.href || el.dataset.href || '#';
+    const imgSrc = el.querySelector('img')?.src;
+
+    if (appDetailTitle) appDetailTitle.textContent = name;
+    if (appDetailDeveloper) appDetailDeveloper.textContent = dev;
+    if (appDetailRating) appDetailRating.textContent = rating ? `${rating} ★` : '';
+    if (appDetailSize) appDetailSize.textContent = size ? size : '';
+    if (appDetailVersion) appDetailVersion.textContent = version ? `v${version}` : '';
+    if (appDetailChangelog) appDetailChangelog.textContent = changelog;
+    if (appDetailChecksum) appDetailChecksum.textContent = checksum;
+    if (appDetailInstall) {
+        appDetailInstall.href = href;
+        appDetailInstall.onclick = () => logEvent('install-click', { slug: el.dataset.slug || name });
+    }
+    if (appSource) {
+        appSource.href = source;
+    }
+    if (imgSrc && appDetailIcon) {
+        appDetailIcon.innerHTML = `<img src="${imgSrc}" alt="${name}">`;
+    }
+
+    appDetail.style.display = 'flex';
+    appDetail.setAttribute('tabindex', '-1');
+    appDetail.focus();
+    removeAppTrap = trapFocus(appDetail, closeAppDetail);
+    const focusTarget = appDetail.querySelector('button, a');
+    focusTarget?.focus();
+    logEvent('app-detail', { name, slug: el.dataset.slug });
+}
+
+function closeAppDetail() {
+    if (appDetail) {
+        appDetail.style.display = 'none';
+        if (removeAppTrap) removeAppTrap();
+    }
+    if (lastFocusedElement) lastFocusedElement.focus();
+}
+
+if (appDetailClose) appDetailClose.onclick = closeAppDetail;
+if (appDetail) {
+    appDetail.addEventListener('click', (e) => {
+        if (e.target === appDetail) closeAppDetail();
+    });
+}
+if (copyChecksum) {
+    copyChecksum.onclick = () => {
+        const text = appDetailChecksum?.textContent || '';
+        if (text) navigator.clipboard?.writeText(text);
+    };
+}
 
 // Book Modal Functions
 function openBookModal(bookId) {
@@ -508,6 +815,12 @@ function openBookModal(bookId) {
         modalContent.innerHTML = bookData[bookId].content;
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden'; 
+        modal.setAttribute('tabindex', '-1');
+        modal.focus();
+        if (removeBookTrap) removeBookTrap();
+        removeBookTrap = trapFocus(modal, closeBookModal);
+        modal.querySelector('.modal-close')?.focus();
+        logEvent('book-open', { book: bookId });
     }
     const modalDate = document.getElementById('modalDate');
     if (modalDate) {
@@ -522,6 +835,7 @@ function closeBookModal() {
     const modal = document.getElementById('bookModal');
     modal.style.display = 'none';
     document.body.style.overflow = 'auto'; // Restore scrolling
+    if (removeBookTrap) removeBookTrap();
 }
 
 // Close modal when clicking outside
@@ -531,3 +845,33 @@ window.onclick = function(event) {
         closeBookModal();
     }
 }
+
+if (bookPrint) {
+    bookPrint.onclick = () => window.print();
+}
+
+// Admin lock
+function initAdminLock() {
+    if (!adminLock) return;
+    const unlocked = localStorage.getItem(ADMIN_UNLOCK) === 'true';
+    if (unlocked) {
+        adminLock.style.display = 'none';
+        return;
+    }
+    adminLock.style.display = 'flex';
+    adminLockSubmit.onclick = () => {
+        if (adminLockInput.value === ADMIN_PIN) {
+            localStorage.setItem(ADMIN_UNLOCK, 'true');
+            adminLock.style.display = 'none';
+            adminLockError.textContent = '';
+        } else {
+            adminLockError.textContent = 'Incorrect PIN';
+        }
+    };
+    adminLockReset.onclick = () => {
+        adminLockInput.value = ADMIN_PIN;
+    };
+}
+
+initAdminLock();
+showAnalyticsBannerIfNeeded();

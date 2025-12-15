@@ -17,6 +17,35 @@
     />
   </head>
   <body>
+    <!-- Admin Lock -->
+    <div id="adminLock" class="admin-lock" role="dialog" aria-modal="true" aria-labelledby="adminLockTitle">
+      <div class="admin-lock__card">
+        <h2 id="adminLockTitle">Enter Admin PIN</h2>
+        <p class="admin-lock__hint">Access is restricted. Enter the PIN to continue.</p>
+        <input type="password" id="adminLockInput" class="admin-lock__input" placeholder="••••" aria-label="Admin PIN" />
+        <div class="admin-lock__actions">
+          <button id="adminLockSubmit" class="btn-primary">Unlock</button>
+          <button id="adminLockReset" class="btn-text">Use default</button>
+        </div>
+        <p id="adminLockError" class="admin-lock__error" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <!-- Analytics opt-in -->
+    <div id="analyticsBanner" class="analytics-banner" role="alert">
+      <div class="analytics-banner__text">
+        <span class="material-icons" aria-hidden="true">insights</span>
+        <div>
+          <p class="analytics-banner__title">Allow usage insights?</p>
+          <p class="analytics-banner__desc">Store anonymized session events locally (searches, tab views, installs). No server calls.</p>
+        </div>
+      </div>
+      <div class="analytics-banner__actions">
+        <button id="analyticsAccept" class="btn-primary">Allow</button>
+        <button id="analyticsDecline" class="btn-text">No thanks</button>
+      </div>
+    </div>
+
     <!-- Header -->
     <header class="header">
       <div class="header-content">
@@ -40,17 +69,43 @@
         </button>
         <button class="nav-tab" data-tab="movies">
           <span class="material-icons">movie</span>
-          <span>Movies</span>
+          <span>Videos</span>
         </button>
         <button class="nav-tab" data-tab="books">
           <span class="material-icons">book</span>
           <span>Books</span>
         </button>
+       
       </div>
     </nav>
 
     <!-- Main Content -->
     <main class="main-content">
+      <!-- Filters -->
+      <section class="filter-bar">
+        <div class="filter-group">
+          <span class="filter-label">Category</span>
+          <button class="chip filter-chip active" data-filter-category="all">All</button>
+          <button class="chip filter-chip" data-filter-category="productivity">Productivity</button>
+          <button class="chip filter-chip" data-filter-category="utilities">Utilities</button>
+          <button class="chip filter-chip" data-filter-category="documentation">Documentation</button>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Rating</span>
+          <button class="chip filter-chip" data-filter-rating="4">4★+</button>
+          <button class="chip filter-chip" data-filter-rating="3">3★+</button>
+          <button class="chip filter-chip active" data-filter-rating="all">Any</button>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Sort</span>
+          <select id="sortSelect" class="sort-select" aria-label="Sort apps">
+            <option value="popular" selected>Most popular</option>
+            <option value="name">Name A–Z</option>
+            <option value="rating">Highest rating</option>
+          </select>
+        </div>
+      </section>
+
       <!-- Hero Banner -->
       <section class="hero-banner">
         <div class="banner-content">
@@ -192,12 +247,12 @@
        <!-- Book Modal -->
        <div id="bookModal" class="book-modal">
         <div class="book-modal-content">
+          <button class="modal-close" onclick="closeBookModal()">
+            <span class="material-icons">close</span>
+          </button>
           <div class="newspaper-header">
             <div class="newspaper-masthead">
               <div class="masthead-left">
-                <button class="modal-close" onclick="closeBookModal()">
-                  <span class="material-icons">close</span>
-                </button>
                 <span class="newspaper-name">ORMOC CITY</span>
                 <span class="newspaper-tagline">LIBRARY GAZETTE</span>
               </div>
@@ -212,13 +267,49 @@
           </div>
           <div class="book-modal-header">
             <h1 id="modalTitle" class="modal-title"></h1>
-          
           </div>
           <div class="book-modal-body">
             <div class="newspaper-byline">
               <p id="modalAuthor" class="modal-author"></p>
             </div>
+            <div class="book-modal-actions">
+              <button id="bookPrint" class="btn-text">Print / Save PDF</button>
+              <span class="scroll-hint">Scroll to read all sections</span>
+            </div>
             <div id="modalContent" class="modal-content newspaper-columns"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- App Detail Drawer -->
+      <div id="appDetail" class="app-detail" role="dialog" aria-modal="true" aria-labelledby="appDetailTitle">
+        <div class="app-detail__panel">
+          <button class="app-detail__close" id="appDetailClose" aria-label="Close app details">
+            <span class="material-icons">close</span>
+          </button>
+          <div class="app-detail__header">
+            <div class="app-detail__icon" id="appDetailIcon"></div>
+            <div>
+              <h2 id="appDetailTitle"></h2>
+              <p id="appDetailDeveloper" class="app-detail__dev"></p>
+              <div class="app-detail__meta">
+                <span id="appDetailVersion"></span>
+                <span id="appDetailSize"></span>
+                <span id="appDetailRating"></span>
+              </div>
+            </div>
+          </div>
+          <div class="app-detail__body">
+            <p id="appDetailChangelog" class="app-detail__changelog"></p>
+            <div class="app-detail__checksums">
+              <p class="app-detail__label">Checksum</p>
+              <code id="appDetailChecksum"></code>
+              <button id="copyChecksum" class="btn-text">Copy</button>
+              <a id="appSource" class="btn-text" target="_blank" rel="noopener">Source</a>
+            </div>
+            <div class="app-detail__actions">
+              <a id="appDetailInstall" class="btn-primary" target="_blank" rel="noopener">Install</a>
+            </div>
           </div>
         </div>
       </div>

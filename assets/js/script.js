@@ -33,13 +33,20 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
         
-        const url = buttonElement.getAttribute('href');
+        const payUrl = buttonElement.dataset.pay;
+        let url = buttonElement.dataset.download || buttonElement.getAttribute('href');
+        
+        if (payUrl) {
+            window.open(payUrl, '_blank');
+            const proceed = confirm('After completing payment, click OK to start the download.');
+            if (!proceed) return false;
+        }
         
         if (!url) {
             alert('Download URL not configured');
             return false;
         }
-        logEvent('install-click', { href: url });
+        logEvent('install-click', { href: url, pay: !!payUrl });
         
         // Mark as downloading
         isDownloading = true;

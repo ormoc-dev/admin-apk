@@ -589,6 +589,9 @@ const appDetailVersion = document.getElementById('appDetailVersion');
 const appDetailSize = document.getElementById('appDetailSize');
 const appDetailRating = document.getElementById('appDetailRating');
 const appDetailChangelog = document.getElementById('appDetailChangelog');
+const appDetailDescription = document.getElementById('appDetailDescription');
+const appDetailFeatures = document.getElementById('appDetailFeatures');
+const appDetailFeaturesList = document.getElementById('appDetailFeaturesList');
 const appDetailChecksum = document.getElementById('appDetailChecksum');
 const appDetailInstall = document.getElementById('appDetailInstall');
 const appDetailIcon = document.getElementById('appDetailIcon');
@@ -630,10 +633,18 @@ function openAppDetail(el) {
     const size = el.dataset.size || '';
     const version = el.dataset.version || '';
     const changelog = el.dataset.changelog || '';
+    const description = el.dataset.description || '';
+    const featuresRaw = el.dataset.features || '';
     const checksum = el.dataset.checksum || '';
     const source = el.dataset.source || '#';
     const href = el.querySelector('a[href]')?.href || el.dataset.href || '#';
     const imgSrc = el.querySelector('img')?.src;
+    let features = [];
+    try {
+        features = featuresRaw ? JSON.parse(featuresRaw) : [];
+    } catch (err) {
+        features = [];
+    }
 
     if (appDetailTitle) appDetailTitle.textContent = name;
     if (appDetailDeveloper) appDetailDeveloper.textContent = dev;
@@ -641,6 +652,23 @@ function openAppDetail(el) {
     if (appDetailSize) appDetailSize.textContent = size ? size : '';
     if (appDetailVersion) appDetailVersion.textContent = version ? `v${version}` : '';
     if (appDetailChangelog) appDetailChangelog.textContent = changelog;
+    if (appDetailDescription) {
+        appDetailDescription.textContent = description;
+        appDetailDescription.style.display = description ? 'block' : 'none';
+    }
+    if (appDetailFeatures && appDetailFeaturesList) {
+        appDetailFeaturesList.innerHTML = '';
+        if (features.length) {
+            features.forEach(f => {
+                const li = document.createElement('li');
+                li.textContent = f;
+                appDetailFeaturesList.appendChild(li);
+            });
+            appDetailFeatures.style.display = 'block';
+        } else {
+            appDetailFeatures.style.display = 'none';
+        }
+    }
     if (appDetailChecksum) appDetailChecksum.textContent = checksum;
     if (appDetailInstall) {
         appDetailInstall.href = href;

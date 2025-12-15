@@ -939,6 +939,23 @@ body {
     gap: 12px;
 }
 
+.app-detail__description {
+    font-size: 14px;
+    color: #3c4043;
+    line-height: 1.6;
+}
+
+.app-detail__features ul {
+    padding-left: 18px;
+    margin: 6px 0;
+    color: #3c4043;
+    line-height: 1.5;
+}
+
+.app-detail__features li {
+    margin-bottom: 4px;
+}
+
 .app-detail__label {
     font-weight: 700;
     margin: 0;
